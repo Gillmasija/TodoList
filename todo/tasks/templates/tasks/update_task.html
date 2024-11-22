@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Task</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Overlay for dim background */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex; /* Visible by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        /* Pop-up container */
+        .popup {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .popup h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .popup form {
+            margin: 20px 0;
+        }
+
+        .popup input[type="text"], .popup input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .popup input[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .popup input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .popup .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 18px;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .popup .close:hover {
+            color: #333;
+        }
+
+        /* Success Message */
+        .success-message {
+            background-color: #e6f7ff;
+            color: #007BFF;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: none; /* Initially hidden */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1100;
+        }
+
+        .success-message p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .success-message button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .success-message button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Pop-up form -->
+    <div class="overlay" id="popup">
+        <div class="popup">
+            <span class="close" onclick="closePopup()">×</span>
+            <h1>Update Task</h1>
+            <form id="updateTaskForm" method="POST" action="">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Update Task">
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-message" id="successMessage">
+        <p>✔ Task updated successfully!</p>
+        <button onclick="redirectToHome()">OK</button>
+    </div>
+
+    <script>
+        // Function to close the pop-up form
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
+        }
+
+        // Function to show the success message
+        function showSuccessMessage() {
+            document.getElementById("successMessage").style.display = "block";
+        }
+
+        // Function to close the success message and redirect to home
+        function redirectToHome() {
+            window.location.href = '/'; // Redirects to the home page
+        }
+
+        // Handle form submission
+        document.getElementById("updateTaskForm").addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent default form submission
+            const form = event.target;
+
+            // Submit the form via POST
+            fetch(form.action, {
+                method: "POST",
+                body: new FormData(form),
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        closePopup(); // Close the form pop-up
+                        showSuccessMessage(); // Show success message
+                    } else {
+                        alert("Failed to update the task. Please try again.");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    alert("Something went wrong. Please try again.");
+                });
+        });
+    </script>
+</body>
+</html>
