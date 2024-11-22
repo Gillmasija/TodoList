@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px 30px;
+            text-align: center;
+            width: 400px;
+        }
+
+        .container h1 {
+            font-size: 22px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .container p {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .buttons a, .buttons input[type="submit"] {
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .buttons a {
+            background-color: #6c757d; /* Cancel button */
+        }
+
+        .buttons a:hover {
+            background-color: #5a6268;
+        }
+
+        .buttons input[type="submit"] {
+            background-color: #dc3545; /* Confirm button */
+            border: none;
+        }
+
+        .buttons input[type="submit"]:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Delete Confirmation</h1>
+        <p>Are you sure you want to delete "{{ item }}"?</p>
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div class="buttons">
+                <a href="{% url 'list' %}">Cancel</a>
+                <input type="submit" value="Confirm">
+            </div>
+        </form>
+    </div>
+</body>
+</html>
